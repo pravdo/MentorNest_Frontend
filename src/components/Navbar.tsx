@@ -4,6 +4,7 @@ import { Dispatch, RootState } from "@/store";
 
 const Navbar = () => {
   const user = useSelector((state: RootState) => state.user);
+  const { role } = useSelector((state: RootState) => state.user);
   const dispatch: Dispatch = useDispatch();
 
   const handleLogout = () => {
@@ -14,9 +15,12 @@ const Navbar = () => {
   return (
     <nav>
       <Link href="/">Logo MentorNest</Link>
+      <Link href="/about-us">About us</Link>
       <Link href="/courses">Courses</Link>
+      {role === "admin" && <Link href="/statistics">Statistics</Link>}
       {user && user.id ? (
         <>
+          <Link href="/profile">Profile</Link>
           <Link href="/logout" onClick={handleLogout}>
             Logout
           </Link>

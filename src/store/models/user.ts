@@ -1,51 +1,72 @@
 import { createModel } from "@rematch/core";
 import { RootModel } from ".";
+import { authService } from "@/services/authService";
+import { UserData, RegisterResponse } from "@/types/authType";
 
 export type UserRole = "admin" | "basic" | null;
 
 export interface UserState {
   id: string | null;
   role: UserRole;
+  token: string | null;
 }
 
 export const user = createModel<RootModel>()({
   state: {
     id: null,
     role: null,
+    token: null,
   } as UserState,
   reducers: {
-    setUser(state, payload: UserState) {
+    // setUser(state, payload: { user: UserState; token: string }) {
+    //   return { ...state, ...payload.user, token: payload.token };
+    // },
+    setUser(
+      state,
+      payload: { id: string; role: "admin" | "basic"; token: string }
+    ) {
       return { ...state, ...payload };
     },
     logout(state) {
-      return { ...state, id: null, role: null };
+      return { ...state, id: null, role: null, token: null };
     },
   },
   effects: (dispatch) => ({
-    // async login(payload, rootState) {
-    //   // Implement login logic here, and then set user
-    //   dispatch.user.setUser({ id: "user-id", role: "basic" });
-    //   // Add logic to handle admin role and set it accordingly
-    // },
-    // async logout(payload, rootState) {
-    //   // Implement logout logic here
-    //   dispatch.user.logout();
-    // },
     async login(payload) {
-      // Perform login logic here (e.g., API call)
-      // Assume the payload is an object with username and password
-      // const response = await yourLoginApiFunction(payload.username, payload.password);
-      // If login is successful, set the user state
-      // if (response.success) {
-      //   dispatch.user.setUser({ id: response.data.id, role: response.data.role });
-      // }
+      try {
+        const data = await authService.login(payload);
+        dispatch.user.setUser({
+          id: data.user.id,
+          role: data.user.role,
+          token: data.access_token,
+        });
+        // dispatch.user.setUser({
+        //   user: {
+        //     id: data.user.id,
+        //     role: data.user.role,
+        //     token: null,
+        //   },
+        //   token: data.access_token,
+        // });
+      } catch (error) {
+        // Handle error, e.g., incorrect credentials
+      }
     },
-    // Effect to handle user logout
+    async register(payload: UserData) {
+      try {
+        const data: RegisterResponse = await authService.register(payload);
+        dispatch.user.setUser({
+          id: data.user.id,
+          role: data.user.role,
+          token: data.access_token,
+        });
+      } catch (error) {
+        console.error("Registration failed:", error);
+      }
+    },
     async logout() {
-      // Perform logout logic here (e.g., API call)
-      // For example, you might want to clear a token from localStorage
-      localStorage.removeItem("authToken");
-      // Reset the user state
+      // Clear token from storage
+      localStorage.removeItem("token");
       dispatch.user.logout();
     },
   }),

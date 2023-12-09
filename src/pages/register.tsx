@@ -1,26 +1,27 @@
+// src/pages/register.tsx
+
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import { Dispatch } from "../store";
+import { UserData } from "@/types/authType";
 
-const LoginPage = () => {
-  const [formData, setFormData] = useState({
+const RegisterPage: React.FC = () => {
+  const [userData, setUserData] = useState<UserData>({
     username: "",
     password: "",
   });
-  const dispatch: Dispatch = useDispatch();
+  const dispatch = useDispatch();
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setUserData({ ...userData, [name]: value });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch.user.login(formData);
-    // Redirect to a protected route on success, handle errors appropriately
-    router.push("/"); // Replace with the route you want to redirect to
+    dispatch.user.register(userData);
+    router.push("/dashboard");
   };
 
   return (
@@ -28,18 +29,18 @@ const LoginPage = () => {
       <input
         type="text"
         name="username"
-        value={formData.username}
+        value={userData.username}
         onChange={handleChange}
       />
       <input
         type="password"
         name="password"
-        value={formData.password}
+        value={userData.password}
         onChange={handleChange}
       />
-      <button type="submit">Login</button>
+      <button type="submit">Register</button>
     </form>
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

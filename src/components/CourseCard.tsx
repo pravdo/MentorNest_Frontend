@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { Course } from "../types";
+import { CourseData } from "../types/courseType";
 
 interface CourseCardProps {
-  course: Course;
+  course: CourseData;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
