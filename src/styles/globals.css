@@ -16,6 +16,12 @@
   }
 }
 
+@layer utilities {
+  .paused {
+    animation-play-state: paused;
+  }
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   padding: 1rem;
