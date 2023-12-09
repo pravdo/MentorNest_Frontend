@@ -3,6 +3,14 @@ export interface UserData {
   password: string;
 }
 
+export interface UserRegisterData {
+  username: string;
+  password: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
 export interface RegisterResponse {
   user: {
     id: string;

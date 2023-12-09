@@ -4,7 +4,7 @@ import { UserData, RegisterResponse } from "@/types/authType";
 import { CourseData } from "@/types/courseType";
 import { EnrollmentData } from "@/types/enrollmentType";
 
-const API_URL = "http://localhost:3001/api"; // Change to your actual Nest.js backend URL
+const API_URL = "http://localhost:3001"; // Change to your actual Nest.js backend URL
 
 // Helper function to get the auth token from storage
 const getAuthToken = () => localStorage.getItem("token");

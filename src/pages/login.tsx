@@ -20,7 +20,8 @@ const LoginPage = () => {
     e.preventDefault();
     dispatch.user.login(formData);
     // Redirect to a protected route on success, handle errors appropriately
-    router.push("/"); // Replace with the route you want to redirect to
+    // router.push("/");
+    // Replace with the route you want to redirect to
   };
 
   return (

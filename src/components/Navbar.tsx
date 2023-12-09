@@ -14,7 +14,7 @@ const Navbar = () => {
 
   return (
     <nav>
-      <Link href="/">Logo MentorNest</Link>
+      Logo MentorNest
       <Link href="/about-us">About us</Link>
       <Link href="/courses">Courses</Link>
       {role === "admin" && <Link href="/statistics">Statistics</Link>}
