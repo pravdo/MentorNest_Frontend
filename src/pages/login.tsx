@@ -5,7 +5,7 @@ import { Dispatch } from "../store";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
-    username: "",
+    userName: "",
     password: "",
   });
   const dispatch: Dispatch = useDispatch();
@@ -25,20 +25,49 @@ const LoginPage = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    // <form onSubmit={handleSubmit}>
+    //   <input
+    //     type="text"
+    //     name="username"
+    //     value={formData.userName}
+    //     onChange={handleChange}
+    //   />
+    //   <input
+    //     type="password"
+    //     name="password"
+    //     value={formData.password}
+    //     onChange={handleChange}
+    //   />
+    //   <button type="submit">Login</button>
+    // </form>
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col space-y-4 max-w-md mx-auto mt-10"
+    >
       <input
+        className="border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         type="text"
-        name="username"
-        value={formData.username}
+        name="userName"
+        placeholder="Username"
+        value={formData.userName}
         onChange={handleChange}
       />
+
       <input
+        className="border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         type="password"
         name="password"
+        placeholder="Password"
         value={formData.password}
         onChange={handleChange}
       />
-      <button type="submit">Login</button>
+
+      <button
+        type="submit"
+        className="bg-blue-500 text-white font-bold p-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+      >
+        Login
+      </button>
     </form>
   );
 };

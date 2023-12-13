@@ -6,7 +6,7 @@ import { UserRegisterData } from "@/types/authType";
 
 const RegisterPage: React.FC = () => {
   const [formData, setFormData] = useState<UserRegisterData>({
-    username: "",
+    userName: "",
     password: "",
     email: "",
     firstName: "",
@@ -20,6 +20,14 @@ const RegisterPage: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("FormData before submitting:", formData);
+
+    if (!formData.userName || formData.userName.length < 2) {
+      alert("Username must be at least 2 characters long");
+      return;
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:3001/auth/register",
@@ -40,35 +48,61 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col space-y-4 max-w-md mx-auto mt-10"
+    >
       <input
-        name="username"
-        value={formData.username}
+        className="border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        type="text"
+        name="userName"
+        placeholder="Username"
+        value={formData.userName}
         onChange={handleInputChange}
       />
+
       <input
+        className="border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         type="password"
         name="password"
+        placeholder="********"
         value={formData.password}
         onChange={handleInputChange}
       />
+
       <input
+        className="border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         type="email"
         name="email"
+        placeholder="Email"
         value={formData.email}
         onChange={handleInputChange}
       />
+
       <input
+        className="border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        type="text"
         name="firstName"
+        placeholder="First Name"
         value={formData.firstName}
         onChange={handleInputChange}
       />
+
       <input
+        className="border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        type="text"
         name="lastName"
+        placeholder="Last Name"
         value={formData.lastName}
         onChange={handleInputChange}
       />
-      <button type="submit">Register</button>
+
+      <button
+        type="submit"
+        className="bg-blue-500 text-white font-bold p-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+      >
+        Register
+      </button>
     </form>
   );
 };
