@@ -5,7 +5,7 @@ import { Dispatch } from "../store";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
-    userName: "",
+    email: "",
     password: "",
   });
   const dispatch: Dispatch = useDispatch();
@@ -25,21 +25,6 @@ const LoginPage = () => {
   };
 
   return (
-    // <form onSubmit={handleSubmit}>
-    //   <input
-    //     type="text"
-    //     name="username"
-    //     value={formData.userName}
-    //     onChange={handleChange}
-    //   />
-    //   <input
-    //     type="password"
-    //     name="password"
-    //     value={formData.password}
-    //     onChange={handleChange}
-    //   />
-    //   <button type="submit">Login</button>
-    // </form>
     <form
       onSubmit={handleSubmit}
       className="flex flex-col space-y-4 max-w-md mx-auto mt-10"
@@ -47,9 +32,9 @@ const LoginPage = () => {
       <input
         className="border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         type="text"
-        name="userName"
-        placeholder="Username"
-        value={formData.userName}
+        name="email"
+        placeholder="email"
+        value={formData.email}
         onChange={handleChange}
       />
 

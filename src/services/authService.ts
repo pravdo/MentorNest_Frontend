@@ -1,13 +1,13 @@
 import axios from "axios";
 
-import { UserData, RegisterResponse } from "@/types/authType";
+import { UserData, RegisterResponse, LoginResponse } from "@/types/authType";
 import { CourseData } from "@/types/courseType";
 import { EnrollmentData } from "@/types/enrollmentType";
 
-const API_URL = "http://localhost:3001"; // Change to your actual Nest.js backend URL
+const API_URL = "http://localhost:3001";
 
-// Helper function to get the auth token from storage
-const getAuthToken = () => localStorage.getItem("token");
+// Helper function to get the auth accessToken from storage
+const getAuthToken = () => localStorage.getItem("accessToken");
 
 // Axios instance with the authorization header
 const api = axios.create({
@@ -15,9 +15,9 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = getAuthToken();
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  const accessToken = getAuthToken();
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
   }
   return config;
 });
@@ -30,16 +30,20 @@ export const authService = {
     );
     return response.data;
   },
-  async login(userData: UserData) {
-    const response = await api.post("/auth/login", userData);
-    if (response.data.access_token) {
-      localStorage.setItem("token", response.data.access_token);
+  async login(userData: UserData): Promise<LoginResponse> {
+    try {
+      const response = await api.post("/auth/login", userData);
+      if (response.data.accessToken) {
+        localStorage.setItem("accessToken", response.data.accessToken);
+      }
+      return response.data;
+    } catch (error) {
+      throw error;
     }
-    return response.data;
   },
   logout() {
-    localStorage.removeItem("token");
-    // You might want to invalidate the token on the backend as well
+    localStorage.removeItem("accessToken");
+    // You might want to invalidate the accessToken on the backend as well
   },
   // User CRUD operations
   createUser(userData: UserData) {

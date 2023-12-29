@@ -17,5 +17,13 @@ export interface RegisterResponse {
     role: "admin" | "basic";
     // ... add other user properties as expected from your backend response
   };
-  access_token: string;
+  accessToken: string;
+}
+
+export interface LoginResponse {
+  accessToken: string;
+  id: string;
+  role: "admin" | "basic";
+  email?: string;
+  userName?: string;
 }

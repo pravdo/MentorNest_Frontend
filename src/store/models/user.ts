@@ -2,33 +2,31 @@ import { createModel } from "@rematch/core";
 import { RootModel } from ".";
 import { authService } from "@/services/authService";
 import { UserData, RegisterResponse } from "@/types/authType";
+import axios from "axios";
 
 export type UserRole = "admin" | "basic" | null;
 
 export interface UserState {
   id: string | null;
   role: UserRole;
-  token: string | null;
+  accessToken: string | null;
 }
 
 export const user = createModel<RootModel>()({
   state: {
     id: null,
     role: null,
-    token: null,
+    accessToken: null,
   } as UserState,
   reducers: {
-    // setUser(state, payload: { user: UserState; token: string }) {
-    //   return { ...state, ...payload.user, token: payload.token };
-    // },
     setUser(
       state,
-      payload: { id: string; role: "admin" | "basic"; token: string }
+      payload: { id: string; role: "admin" | "basic"; accessToken: string }
     ) {
       return { ...state, ...payload };
     },
     logout(state) {
-      return { ...state, id: null, role: null, token: null };
+      return { ...state, id: null, role: null, accessToken: null };
     },
   },
   effects: (dispatch) => ({
@@ -36,20 +34,18 @@ export const user = createModel<RootModel>()({
       try {
         const data = await authService.login(payload);
         dispatch.user.setUser({
-          id: data.user.id,
-          role: data.user.role,
-          token: data.access_token,
+          id: data.id,
+          role: data.role,
+          accessToken: data.accessToken,
         });
-        // dispatch.user.setUser({
-        //   user: {
-        //     id: data.user.id,
-        //     role: data.user.role,
-        //     token: null,
-        //   },
-        //   token: data.access_token,
-        // });
-      } catch (error) {
-        // Handle error, e.g., incorrect credentials
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          // Now TypeScript knows that error is an AxiosError
+          console.error("Login error:", error.response?.data || error.message);
+        } else {
+          // Error is not an AxiosError, could be something else
+          console.error("An unexpected error occurred:", error);
+        }
       }
     },
     async register(payload: UserData) {
@@ -58,15 +54,15 @@ export const user = createModel<RootModel>()({
         dispatch.user.setUser({
           id: data.user.id,
           role: data.user.role,
-          token: data.access_token,
+          accessToken: data.accessToken,
         });
       } catch (error) {
         console.error("Registration failed:", error);
       }
     },
     async logout() {
-      // Clear token from storage
-      localStorage.removeItem("token");
+      // Clear accessToken from storage
+      localStorage.removeItem("accessToken");
       dispatch.user.logout();
     },
   }),
